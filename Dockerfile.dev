@@ -1,0 +1,52 @@
+# syntax=docker/dockerfile:1
+# check=error=true
+
+# This Dockerfile is designed for development.
+# For production, use the default Rails-generated Dockerfile instead.
+
+# Match .ruby-version
+ARG RUBY_VERSION=4.0.1
+FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+
+# Rails app lives here
+WORKDIR /rails
+
+# Install base packages needed at runtime + for building most gems in dev
+RUN apt-get update -qq && \
+  apt-get install --no-install-recommends -y \
+  curl \
+  libjemalloc2 \
+  postgresql-client \
+  build-essential \
+  git \
+  libpq-dev \
+  libyaml-dev \
+  pkg-config && \
+  rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Set development environment, install all groups (no BUNDLE_DEPLOYMENT)
+ENV RAILS_ENV="development" \
+  BUNDLE_PATH="/usr/local/bundle" \
+  BUNDLE_WITHOUT=""
+
+# Install application gems (with cache reuse between builds)
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy application code (for non-bind-mount use)
+COPY . .
+
+# Run as non-root user (still good in dev)
+RUN groupadd --system --gid 1000 rails && \
+  useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+  chown -R rails:rails db log storage tmp
+USER 1000:1000
+
+# In dev we usually let rails server listen on 3000
+EXPOSE 3000
+
+# Simple dev entrypoint, skip DB migrate/prepare magic; do that manually
+ENTRYPOINT []
+
+# Start rails server in development
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
