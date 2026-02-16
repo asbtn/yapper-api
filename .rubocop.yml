@@ -1,8 +1,72 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
-
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
+
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
+
+Style/ClassAndModuleChildren:
+  Enabled: true
+  EnforcedStyle: nested
+
+AllCops:
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+  EnforcedStyle: empty_lines
+
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: group
+  AllowModifiersOnAttrs: false
+
+Style/TrivialAccessors:
+  Enabled: true
+  ExactNameMatch: true
+  AllowPredicates: true
+  AllowDSLWriters: false
+  IgnoreClassMethods: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: true
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Metrics/BlockLength:
+  Enabled: true
+  Max: 25
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/queue_schema.rb'
+    - 'db/**/*.rb'
+    - 'config/routes.rb'
+    - 'config/environments/**/*.rb'
+    - 'spec/**/*.rb'
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+
+Lint/MissingSuper:
+  Enabled: true
+  Exclude:
+    - 'app/services/**/*'
+
+RSpecRails/InferredSpecType:
+  Enabled: false
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/requests/**/*_spec.rb'
