@@ -1,13 +1,17 @@
 module Sessions
 
-  class Create < ApplicationService
+  class Create
+
+    prepend SimpleCommand
 
     def initialize(params)
       @params = params
     end
 
     def call
-      authenticate ? success(session) : failure(:base, "Invalid credentials")
+      return session if authenticate
+
+      errors.add(:base, "Invalid credentials")
     end
 
     private
