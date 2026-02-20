@@ -398,7 +398,7 @@ DEPENDENCIES
   rubocop-rspec (~> 3.9)
   rubocop-rspec_rails (~> 2.32)
   shoulda-matchers (~> 7.0)
-  simple_command
+  simple_command (~> 1.0)
   solid_cable
   solid_cache
   solid_queue

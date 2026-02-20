@@ -16,12 +16,15 @@
 require "rails_helper"
 
 describe User, type: :model do
-  subject { create(:user, password: "password") }
+  subject { create(:user, password: "password-1") }
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:username) }
     it { is_expected.to validate_presence_of(:email_address) }
-    it { is_expected.to validate_uniqueness_of(:username) }
+    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
+    it { is_expected.to allow_value("test@example.com").for(:email_address) }
+    it { is_expected.not_to allow_value("te st@e.jj").for(:email_address) }
+    it { is_expected.to validate_length_of(:password).is_at_least(6) }
   end
 
   describe "normalizations" do

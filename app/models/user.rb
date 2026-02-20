@@ -15,11 +15,38 @@
 #
 class User < ApplicationRecord
 
+  # == Extensions ===========================================================
+
+  # == Constants ============================================================
+
+  # == Attributes ===========================================================
+
+  # == Relationships ========================================================
+
+  # == Validations ==========================================================
   has_secure_password
 
-  validates :username, presence: true, uniqueness: true
-  validates :email_address, presence: true
+  # TODO: Validate characters in username
+  validates :username,
+            presence: true,
+            uniqueness: { case_sensitive: false },
+            length: { minimum: 3, maximum: 30 }
 
+  validates :email_address,
+            presence: true,
+            format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  # TODO: Add password complexity
+  validates :password,
+            length: { minimum: 6 }
+
+  # == Scopes ===============================================================
+
+  # == Callbacks ============================================================
+
+  # == Class Methods ========================================================
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  # == Instance Methods =====================================================
 
 end

@@ -70,28 +70,18 @@
                         },
                         "details": {
                           "type": "object",
-                          "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "error": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "nullable": true
-                                }
+                          "properties": {
+                            "base": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
                               }
                             }
                           },
-                          "example": {
-                            "base": [
-                              {
-                                "error": "Invalid credentials"
-                              }
-                            ]
-                          }
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -127,6 +117,208 @@
                   "email_address",
                   "password"
                 ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users": {
+      "post": {
+        "summary": "Create user (signup)",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "user created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "email_address": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "username",
+                            "email_address"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "username already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "full_messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "Username can't be blank",
+                            "Email address is invalid"
+                          ]
+                        },
+                        "details": {
+                          "type": "object",
+                          "properties": {
+                            "username": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "email_address": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "password": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "password_confirmation": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "full_messages",
+                        "details"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing nested user params",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "full_messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "User can't be blank"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string",
+                        "example": "test-user"
+                      },
+                      "email_address": {
+                        "type": "string",
+                        "example": "test@example.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "SecurePass123!"
+                      },
+                      "password_confirmation": {
+                        "type": "string",
+                        "example": "SecurePass123!"
+                      }
+                    },
+                    "required": [
+                      "username",
+                      "email_address",
+                      "password",
+                      "password_confirmation"
+                    ]
+                  }
+                }
               }
             }
           }
