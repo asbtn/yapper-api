@@ -60,33 +60,18 @@ RSpec.describe "Sessions API", type: :request do
                  errors: {
                    type: :object,
                    properties: {
-                     full_messages: {
-                       type: :array,
-                       items: { type: :string },
-                       example: ["Invalid credentials"]
-                     },
+                     full_messages: { type: :array, items: { type: :string } },
                      details: {
                        type: :object,
-                       additionalProperties: {
-                         type: :array,
-                         items: {
-                           type: :object,
-                           properties: {
-                             error: { type: :string },
-                             value: { type: :string, nullable: true }
-                           }
-                         }
-                       },
-                       example: {
-                         base: [{ error: "Invalid credentials" }]
+                       properties: {
+                         base: { type: :array, items: { type: :string } }
                        }
                      }
                    },
                    required: %w[full_messages details]
                  }
                },
-               required: ["errors"]
-
+               required: %w[errors]
         run_test!
       end
     end

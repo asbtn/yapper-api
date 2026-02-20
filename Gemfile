@@ -41,6 +41,12 @@ gem "jsonapi-serializer", "~> 2.2"
 # JWT
 gem "jwt", "~> 3.1"
 
+# CORS
+gem "rack-cors", "~> 3.0"
+
+# Service objects interface
+gem "simple_command", "~> 1.0"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -70,5 +76,3 @@ group :development, :test do
   # One-liners
   gem "shoulda-matchers", "~> 7.0"
 end
-
-gem "rack-cors", "~> 3.0"
