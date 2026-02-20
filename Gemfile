@@ -70,3 +70,5 @@ group :development, :test do
   # One-liners
   gem "shoulda-matchers", "~> 7.0"
 end
+
+gem "rack-cors", "~> 3.0"
