@@ -70,3 +70,6 @@ RSpecRails/InferredSpecType:
 RSpec/EmptyExampleGroup:
   Exclude:
     - 'spec/requests/**/*_spec.rb'
+
+RSpec/ExampleLength:
+  Enabled: false

@@ -4,18 +4,20 @@ class ApplicationController < ActionController::API
 
   private
 
+  # TODO: Add rescuing errors
+  # TODO: Add basic responses like 404
+
   def render_success(serializer, status: :ok)
     render json: serializer.serializable_hash, status: status
   end
 
   def render_errors(errors, status: :unprocessable_entity)
-    serialized = if errors.is_a?(Hash)
-                   ErrorSerializer.from_hash(errors)
-                 else
-                   ErrorSerializer.new(errors)
-                 end
-
-    render json: serialized.serializable_hash, status: status
+    render json: {
+      errors: {
+        full_messages: errors.full_messages,
+        details: errors.to_hash
+      }
+    }, status: status
   end
 
 end

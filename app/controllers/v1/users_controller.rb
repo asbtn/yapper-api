@@ -1,0 +1,25 @@
+module V1
+
+  class UsersController < ApplicationController
+
+    allow_unauthenticated_access only: :create
+
+    def create
+      service = Users::Create.call(user_params)
+
+      if service.success?
+        render_success UserSerializer.new(service.result), status: :created
+      else
+        render_errors service.errors
+      end
+    end
+
+    private
+
+    def user_params
+      params.expect(user: %i[username email_address password password_confirmation])
+    end
+
+  end
+
+end
