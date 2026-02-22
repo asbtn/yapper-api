@@ -29,7 +29,7 @@ module Sessions
     end
 
     def token
-      JwtToken.encode({ id: user.id })
+      user.generate_jwt_token
     end
 
     def session

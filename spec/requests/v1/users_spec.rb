@@ -119,7 +119,7 @@ RSpec.describe "Users API", type: :request do
       end
 
       response "422", "username" do
-        let!(:existing_user) { create(:user, username: "test-user") }
+        let!(:existing_user) { create(:user) }
         let(:body) do
           {
             user: {
@@ -135,7 +135,7 @@ RSpec.describe "Users API", type: :request do
       end
 
       response "422", "username already taken" do
-        let!(:existing_user) { create(:user, username: "test-user") }
+        let!(:existing_user) { create(:user) }
         let(:body) do
           {
             user: {
