@@ -9,7 +9,6 @@ services:
       - .:/rails
     environment:
       - RAILS_ENV=development
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/app_development
   db:
     image: postgres:16
     environment:
