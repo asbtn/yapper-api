@@ -23,7 +23,7 @@ docker compose up --build
 
 - [x] User signup/login (JWT auth)
 - [ ] User profiles (bio, avatar)
-- [ ] Create, edit, and delete yaps
+- [x] Create, edit, and delete posts (yaps)
 - [ ] View and fetch yaps by user
 - [ ] Follow/unfollow users
 - [ ] Feed with yaps from followed accounts
