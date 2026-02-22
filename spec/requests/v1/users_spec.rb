@@ -175,4 +175,43 @@ RSpec.describe "Users API", type: :request do
       end
     end
   end
+
+  path "/v1/users/{id}" do
+    let(:Authorization) { authorization_token } # rubocop:disable RSpec/VariableName
+
+    parameter name: :id, in: :path, type: :string, description: "User ID"
+
+    get "Show a user" do
+      produces "application/json"
+
+      security [{ jwt: [] }]
+
+      response "200", "post retrieved successfully" do
+        let(:id) { create(:user).id }
+
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
+                   properties: {
+                     id: { type: :string },
+                     type: { type: :string, example: "user" },
+                     attributes: {
+                       type: :object,
+                       properties: {
+                         id: { type: :integer },
+                         username: { type: :string },
+                         email_address: { type: :string }
+                       },
+                       required: %w[id username email_address]
+                     }
+                   },
+                   required: %w[id type attributes]
+                 }
+               },
+               required: %w[data]
+        run_test!
+      end
+    end
+  end
 end
