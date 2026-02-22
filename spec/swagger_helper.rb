@@ -29,7 +29,16 @@ RSpec.configure do |config|
             }
           }
         }
-      ]
+      ],
+      components: {
+        securitySchemes: {
+          jwt: {
+            type: :apiKey,
+            name: "Authorization",
+            in: :header
+          }
+        }
+      }
     }
   }
 

@@ -22,6 +22,7 @@ class User < ApplicationRecord
   # == Attributes ===========================================================
 
   # == Relationships ========================================================
+  has_many :posts, dependent: :destroy
 
   # == Validations ==========================================================
   has_secure_password
@@ -48,5 +49,8 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   # == Instance Methods =====================================================
+  def generate_jwt_token
+    JwtToken.encode({ id: })
+  end
 
 end

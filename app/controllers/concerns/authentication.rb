@@ -15,7 +15,7 @@ module Authentication
   private
 
   def authorization_token
-    return unless request.headers["Authorization"]&.start?("Bearer ")
+    return unless request.headers["Authorization"]&.start_with?("Bearer ")
 
     request.headers["Authorization"].split.last
   end

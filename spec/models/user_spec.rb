@@ -16,7 +16,11 @@
 require "rails_helper"
 
 describe User, type: :model do
-  subject { create(:user, password: "password-1") }
+  subject { create(:user) }
+
+  describe "associations" do
+    it { is_expected.to have_many(:posts) }
+  end
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:username) }

@@ -30,6 +30,8 @@ require "factory_bot_rails"
 # recreate the test database by loading the schema.
 # If you are not using ActiveRecord, you can remove these lines.
 
+Rails.root.glob("spec/support/**/*.rb").each { |f| require f }
+
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
@@ -72,6 +74,8 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include FactoryBot::Syntax::Methods
+
+  config.include AuthenticationHelper, type: :request
 end
 
 Shoulda::Matchers.configure do |config|
