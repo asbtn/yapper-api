@@ -4,6 +4,10 @@ module V1
 
     allow_unauthenticated_access only: :create
 
+    def show
+      render_success UserSerializer.new(user)
+    end
+
     def create
       service = Users::Create.call(user_params)
 
@@ -15,6 +19,10 @@ module V1
     end
 
     private
+
+    def user
+      @user ||= User.find(params[:id])
+    end
 
     def user_params
       params.expect(user: %i[username email_address password password_confirmation])

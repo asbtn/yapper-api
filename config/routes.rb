@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :v1 do
     resources :sessions, only: %i[create]
-    resources :users,    only: %i[create] do
+    resources :users,    only: %i[show create] do
       resources :posts, only: %i[show create index destroy]
     end
   end
