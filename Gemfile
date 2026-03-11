@@ -64,7 +64,7 @@ group :development, :test do
   gem "rubocop-rspec_rails", "~> 2.32", require: false
 
   # Rspec
-  gem "rspec-rails", "~> 8.0.0"
+  gem "rspec-rails", "~> 8.0.4"
 
   # Swagger
   gem "rswag", "~> 2.17"
