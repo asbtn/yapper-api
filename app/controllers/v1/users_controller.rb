@@ -9,7 +9,7 @@ module V1
     end
 
     def create
-      service = Users::Create.call(user_params)
+      service = ::Users::Create.call(user_params)
 
       if service.success?
         render_success UserSerializer.new(service.result), status: :created
@@ -21,11 +21,15 @@ module V1
     private
 
     def user
-      @user ||= User.find(params[:id])
+      @user ||= if params[:id] == "me"
+                  current_user
+                else
+                  User.find_by_identifier(params[:id])
+                end
     end
 
     def user_params
-      params.expect(user: %i[username email_address password password_confirmation])
+      params.expect(user: %i[handle username bio email_address password password_confirmation])
     end
 
   end

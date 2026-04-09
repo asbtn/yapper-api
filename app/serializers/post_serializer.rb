@@ -22,6 +22,8 @@ class PostSerializer
 
   attributes :id, :content, :created_at
 
-  belongs_to :user
+  attribute :user do |post|
+    UserSerializer.new(post.user).serializable_hash[:data][:attributes]
+  end
 
 end

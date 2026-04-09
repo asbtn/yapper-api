@@ -7,6 +7,7 @@ describe Users::Create, type: :service do
     let(:params) do
       {
         username: "test-user",
+        handle: "test-handle",
         email_address: "user@example.com",
         password: "password123",
         password_confirmation: "password123"

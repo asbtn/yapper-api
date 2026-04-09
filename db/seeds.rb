@@ -9,6 +9,8 @@
 #   end
 
 user = User.find_or_initialize_by(email_address: "test@example.com")
-user.password = "Password-1!"
-user.username = "test-user"
+user.password = "Password-01"
+user.username = Faker::Name.first_name
+user.handle = Faker::Internet.username(separators: %w[_ -])
+user.bio = Faker::Lorem.sentence
 user.save

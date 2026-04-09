@@ -23,12 +23,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_142406) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "bio"
     t.datetime "created_at", null: false
     t.string "email_address", null: false
+    t.string "handle", null: false
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
-    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["handle"], name: "index_users_on_handle", unique: true
   end
 
   add_foreign_key "posts", "users"

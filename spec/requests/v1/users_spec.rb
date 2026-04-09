@@ -14,12 +14,14 @@ RSpec.describe "Users API", type: :request do
           user: {
             type: :object,
             properties: {
+              handle: { type: :string, example: "test-handle" },
               username: { type: :string, example: "test-user" },
+              bio: { type: :string, example: "This is a test user." },
               email_address: { type: :string, example: "test@example.com" },
               password: { type: :string, example: "SecurePass123!" },
               password_confirmation: { type: :string, example: "SecurePass123!" }
             },
-            required: %w[username email_address password password_confirmation]
+            required: %w[username handle email_address password password_confirmation]
           }
         }
       }
@@ -29,6 +31,8 @@ RSpec.describe "Users API", type: :request do
           {
             user: {
               username: "test-user",
+              handle: "test-handle",
+              bio: "This is a test user.",
               email_address: "test@example.com",
               password: "SecurePass123!",
               password_confirmation: "SecurePass123!"
@@ -47,10 +51,12 @@ RSpec.describe "Users API", type: :request do
                        type: :object,
                        properties: {
                          id: { type: :integer },
+                         handle: { type: :string },
                          username: { type: :string },
+                         bio: { type: :string },
                          email_address: { type: :string }
                        },
-                       required: %w[id username email_address]
+                       required: %w[id username handle email_address]
                      }
                    },
                    required: %w[id type attributes]
@@ -91,6 +97,10 @@ RSpec.describe "Users API", type: :request do
                        type: :object,
                        properties: {
                          username: {
+                           type: %i[string array],
+                           items: { type: :string }
+                         },
+                         handle: {
                            type: %i[string array],
                            items: { type: :string }
                          },
@@ -182,6 +192,8 @@ RSpec.describe "Users API", type: :request do
     parameter name: :id, in: :path, type: :string, description: "User ID"
 
     get "Show a user" do
+      tags "Users"
+
       produces "application/json"
 
       security [{ jwt: [] }]
@@ -189,6 +201,44 @@ RSpec.describe "Users API", type: :request do
       response "200", "post retrieved successfully" do
         let(:id) { create(:user).id }
 
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
+                   properties: {
+                     id: { type: :string },
+                     type: { type: :string, example: "user" },
+                     attributes: {
+                       type: :object,
+                       properties: {
+                         id: { type: :integer },
+                         username: { type: :string },
+                         email_address: { type: :string }
+                       },
+                       required: %w[id username email_address]
+                     }
+                   },
+                   required: %w[id type attributes]
+                 }
+               },
+               required: %w[data]
+        run_test!
+      end
+    end
+  end
+
+  path "/v1/users/me" do
+    let(:user) { create(:user) }
+    let(:Authorization) { authorization_token(user) } # rubocop:disable RSpec/VariableName
+
+    get "Show current user" do
+      tags "Users"
+
+      produces "application/json"
+
+      security [{ jwt: [] }]
+
+      response "200", "post retrieved successfully" do
         schema type: :object,
                properties: {
                  data: {
