@@ -73,3 +73,7 @@ RSpec/EmptyExampleGroup:
 
 RSpec/ExampleLength:
   Enabled: false
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_identifier

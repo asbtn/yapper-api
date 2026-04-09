@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  bio             :string
 #  email_address   :string           not null
+#  handle          :string           not null
 #  password_digest :string           not null
 #  username        :string           not null
 #  created_at      :datetime         not null
@@ -11,7 +13,7 @@
 #
 # Indexes
 #
-#  index_users_on_username  (username) UNIQUE
+#  index_users_on_handle  (handle) UNIQUE
 #
 class User < ApplicationRecord
 
@@ -27,11 +29,18 @@ class User < ApplicationRecord
   # == Validations ==========================================================
   has_secure_password
 
-  # TODO: Validate characters in username
-  validates :username,
+  # TODO: Validate characters in handle
+  validates :handle,
             presence: true,
             uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 30 }
+
+  validates :username,
+            presence: true,
+            length: { minimum: 3, maximum: 30 }
+
+  validates :bio,
+            length: { maximum: 300 }
 
   validates :email_address,
             presence: true,
@@ -48,9 +57,13 @@ class User < ApplicationRecord
   # == Class Methods ========================================================
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
+  def self.find_by_identifier(identifier)
+    where("handle = ? OR id::text = ?", identifier, identifier).take!
+  end
+
   # == Instance Methods =====================================================
   def generate_jwt_token
-    JwtToken.encode({ id: })
+    JwtToken.encode({ id: }, expiry: 7.days)
   end
 
 end

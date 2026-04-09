@@ -5,7 +5,7 @@ module V1
     # TODO: Add Pundit
     # TODO: Add pagination
     def index
-      posts = user.posts
+      posts = user.posts.order(created_at: :desc)
 
       render_success PostSerializer.new(posts)
     end
