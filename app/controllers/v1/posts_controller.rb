@@ -2,25 +2,13 @@ module V1
 
   class PostsController < ApplicationController
 
-    # TODO: Add Pundit
-    # TODO: Add pagination
-    def index
-      posts = user.posts.order(created_at: :desc)
-
-      render_success PostSerializer.new(posts)
-    end
-
-    def show
-      render_success PostSerializer.new(post)
-    end
-
     def create
-      service = Posts::Create.call(user, post_params)
+      post = current_user.posts.build(post_params)
 
-      if service.success?
-        render_success PostSerializer.new(service.result), status: :created
+      if post.save
+        render_success PostSerializer.new(post), status: :created
       else
-        render_errors service.errors
+        render_errors post.errors
       end
     end
 
@@ -32,12 +20,8 @@ module V1
 
     private
 
-    def user
-      @user ||= User.find(params[:user_id])
-    end
-
     def post
-      @post ||= user.posts.find(params[:id])
+      @post ||= current_user.posts.find(params[:id])
     end
 
     def post_params

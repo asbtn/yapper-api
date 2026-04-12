@@ -20,10 +20,8 @@ class PostSerializer
 
   include JSONAPI::Serializer
 
-  attributes :id, :content, :created_at
+  belongs_to :user
 
-  attribute :user do |post|
-    UserSerializer.new(post.user).serializable_hash[:data][:attributes]
-  end
+  attributes :id, :content, :created_at
 
 end

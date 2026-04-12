@@ -32,9 +32,7 @@ RSpec.describe "Sessions API", type: :request do
                  user: {
                    type: :object,
                    properties: {
-                     id: { type: :integer, example: 12 },
-                     email_address: { type: :string, example: "test@example.com" },
-                     username: { type: :string, example: "test-user" }
+                     data: USER_RESOURCE_OBJECT_SCHEMA
                    }
                  }
                },
@@ -43,7 +41,7 @@ RSpec.describe "Sessions API", type: :request do
         run_test! do |response|
           data = JSON.parse(response.body)
           expect(data["token"]).to be_present
-          expect(data["user"]["email_address"]).to eq(user.email_address)
+          expect(data["user"]["data"]["attributes"]["email_address"]).to eq(user.email_address)
         end
       end
 
@@ -55,31 +53,7 @@ RSpec.describe "Sessions API", type: :request do
           }
         end
 
-        schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     full_messages: {
-                       type: :array,
-                       items: { type: :string },
-                       example: ["Invalid credentials"]
-                     },
-                     details: {
-                       type: :object,
-                       properties: {
-                         base: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         }
-                       },
-                       additionalProperties: false
-                     }
-                   },
-                   required: %w[full_messages details]
-                 }
-               },
-               required: %w[errors]
+        schema VALIDATION_ERRORS_RESPONSE_SCHEMA
 
         run_test!
       end
