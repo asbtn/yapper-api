@@ -26,10 +26,31 @@ class User < ApplicationRecord
   # == Relationships ========================================================
   has_many :posts, dependent: :destroy
 
+  has_many :outgoing_follows,
+           class_name: "Follow",
+           foreign_key: :follower_id,
+           inverse_of: :follower,
+           dependent: :destroy
+
+  has_many :incoming_follows,
+           class_name: "Follow",
+           foreign_key: :following_id,
+           inverse_of: :following,
+           dependent: :destroy
+
+  has_many :following,
+           through: :outgoing_follows,
+           source: :following
+
+  has_many :followers,
+           through: :incoming_follows,
+           source: :follower
+
   # == Validations ==========================================================
   has_secure_password
 
   # TODO: Validate characters in handle
+  # TODO: disallow me as a handle
   validates :handle,
             presence: true,
             uniqueness: { case_sensitive: false },
@@ -56,10 +77,6 @@ class User < ApplicationRecord
 
   # == Class Methods ========================================================
   normalizes :email_address, with: ->(e) { e.strip.downcase }
-
-  def self.find_by_identifier(identifier)
-    where("handle = ? OR id::text = ?", identifier, identifier).take!
-  end
 
   # == Instance Methods =====================================================
   def generate_jwt_token

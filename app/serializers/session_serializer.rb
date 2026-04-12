@@ -8,7 +8,7 @@ class SessionSerializer
   def serializable_hash
     {
       token: token,
-      user: UserSerializer.new(user).serializable_hash[:data][:attributes]
+      user: UserSerializer.new(user).serializable_hash
     }
   end
 

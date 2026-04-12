@@ -74,6 +74,17 @@ RSpec/EmptyExampleGroup:
 RSpec/ExampleLength:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - 'spec/requests/**/*_spec.rb'
+
+RSpec/VariableName:
+  AllowedPatterns:
+    - '^Authorization$'
+
+RSpec/MultipleExpectations:
+  Max: 2
+
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_identifier

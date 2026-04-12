@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_22_142406) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_10_161414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "follows", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "follower_id", null: false
+    t.bigint "following_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["follower_id", "following_id"], name: "index_follows_on_follower_id_and_following_id", unique: true
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
+    t.index ["following_id"], name: "index_follows_on_following_id"
+    t.check_constraint "follower_id <> following_id", name: "follows_no_self_follow"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.text "content", null: false
@@ -33,5 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_142406) do
     t.index ["handle"], name: "index_users_on_handle", unique: true
   end
 
+  add_foreign_key "follows", "users", column: "follower_id"
+  add_foreign_key "follows", "users", column: "following_id"
   add_foreign_key "posts", "users"
 end

@@ -1,0 +1,35 @@
+module V1
+
+  module Users
+
+    class FollowsController < ApplicationController
+
+      # TODO: Add Pundit
+
+      def create
+        follow = Follow.new(follower: current_user, following: user)
+
+        if follow.save
+          render_success UserSerializer.new(user), status: :created
+        else
+          render_errors follow.errors
+        end
+      end
+
+      def destroy
+        current_user.following.destroy(user)
+
+        head :no_content
+      end
+
+      private
+
+      def user
+        @user ||= User.find(params[:user_id])
+      end
+
+    end
+
+  end
+
+end

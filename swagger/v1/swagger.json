@@ -5,18 +5,7 @@
     "version": "v1"
   },
   "paths": {
-    "/v1/users/{user_id}/posts": {
-      "parameters": [
-        {
-          "name": "user_id",
-          "in": "path",
-          "description": "User ID",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
+    "/v1/posts": {
       "post": {
         "summary": "Create a post",
         "tags": [
@@ -121,24 +110,10 @@
                           "type": "array",
                           "items": {
                             "type": "string"
-                          },
-                          "example": [
-                            "Content can't be blank"
-                          ]
+                          }
                         },
                         "details": {
-                          "type": "object",
-                          "properties": {
-                            "content": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          }
+                          "type": "object"
                         }
                       },
                       "required": [
@@ -181,11 +156,494 @@
             }
           }
         }
+      }
+    },
+    "/v1/posts/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "Post ID",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "delete": {
+        "summary": "Delete a post",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "post deleted successfully"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "post not found"
+          }
+        }
+      }
+    },
+    "/v1/sessions": {
+      "post": {
+        "summary": "Create session (login)",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "user"
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "username": {
+                                  "type": "string"
+                                },
+                                "bio": {
+                                  "type": "string"
+                                },
+                                "email_address": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "username",
+                                "handle",
+                                "email_address"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "type",
+                            "attributes"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "token",
+                    "user"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "full_messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "details": {
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "full_messages",
+                        "details"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email_address": {
+                    "type": "string",
+                    "example": "test@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                },
+                "required": [
+                  "email_address",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{user_id}/followers": {
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "List user's followers",
+        "tags": [
+          "Follows"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "followers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string"
+                              },
+                              "email_address": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "username",
+                              "handle",
+                              "email_address"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "user not found"
+          }
+        }
+      }
+    },
+    "/v1/users/{user_id}/followings": {
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "List users this user follows",
+        "tags": [
+          "Follows"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "followings retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string"
+                              },
+                              "email_address": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "username",
+                              "handle",
+                              "email_address"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "user not found"
+          }
+        }
+      }
+    },
+    "/v1/users/{user_id}/follow": {
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Follow user",
+        "tags": [
+          "Follows"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user followed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "handle": {
+                              "type": "string"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "bio": {
+                              "type": "string"
+                            },
+                            "email_address": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "username",
+                            "handle",
+                            "email_address"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "user not found"
+          },
+          "422": {
+            "description": "validation failed"
+          }
+        }
       },
+      "delete": {
+        "summary": "Unfollow user",
+        "tags": [
+          "Follows"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "user already unfollowed"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "user not found"
+          }
+        }
+      }
+    },
+    "/v1/users/{user_id}/posts": {
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "List user's posts",
         "tags": [
-          "User Posts"
+          "Posts"
         ],
         "security": [
           {
@@ -251,6 +709,55 @@
                                     }
                                   }
                                 }
+                              }
+                            }
+                          },
+                          "included": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "example": "user"
+                                  },
+                                  "attributes": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "handle": {
+                                        "type": "string"
+                                      },
+                                      "username": {
+                                        "type": "string"
+                                      },
+                                      "bio": {
+                                        "type": "string"
+                                      },
+                                      "email_address": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "username",
+                                      "handle",
+                                      "email_address"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type",
+                                  "attributes"
+                                ]
                               }
                             }
                           }
@@ -382,146 +889,6 @@
             "description": "post not found"
           }
         }
-      },
-      "delete": {
-        "summary": "Delete a post",
-        "tags": [
-          "Posts"
-        ],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "post deleted successfully"
-          },
-          "401": {
-            "description": "unauthorized"
-          },
-          "404": {
-            "description": "post not found"
-          }
-        }
-      }
-    },
-    "/v1/sessions": {
-      "post": {
-        "summary": "Create session (login)",
-        "tags": [
-          "Authentication"
-        ],
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "authenticated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer",
-                          "example": 12
-                        },
-                        "email_address": {
-                          "type": "string",
-                          "example": "test@example.com"
-                        },
-                        "username": {
-                          "type": "string",
-                          "example": "test-user"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "token",
-                    "user"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "authentication failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "object",
-                      "properties": {
-                        "full_messages": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "example": [
-                            "Invalid credentials"
-                          ]
-                        },
-                        "details": {
-                          "type": "object",
-                          "properties": {
-                            "base": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "additionalProperties": false
-                        }
-                      },
-                      "required": [
-                        "full_messages",
-                        "details"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "errors"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email_address": {
-                    "type": "string",
-                    "example": "test@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "password123"
-                  }
-                },
-                "required": [
-                  "email_address",
-                  "password"
-                ]
-              }
-            }
-          }
-        }
       }
     },
     "/v1/users": {
@@ -555,7 +922,13 @@
                             "id": {
                               "type": "integer"
                             },
+                            "handle": {
+                              "type": "string"
+                            },
                             "username": {
+                              "type": "string"
+                            },
+                            "bio": {
                               "type": "string"
                             },
                             "email_address": {
@@ -565,6 +938,7 @@
                           "required": [
                             "id",
                             "username",
+                            "handle",
                             "email_address"
                           ]
                         }
@@ -607,6 +981,15 @@
                           "type": "object",
                           "properties": {
                             "username": {
+                              "type": [
+                                "string",
+                                "array"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "handle": {
                               "type": [
                                 "string",
                                 "array"
@@ -695,9 +1078,17 @@
                   "user": {
                     "type": "object",
                     "properties": {
+                      "handle": {
+                        "type": "string",
+                        "example": "test-handle"
+                      },
                       "username": {
                         "type": "string",
                         "example": "test-user"
+                      },
+                      "bio": {
+                        "type": "string",
+                        "example": "This is a test user."
                       },
                       "email_address": {
                         "type": "string",
@@ -714,6 +1105,7 @@
                     },
                     "required": [
                       "username",
+                      "handle",
                       "email_address",
                       "password",
                       "password_confirmation"

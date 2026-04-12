@@ -17,8 +17,8 @@
 #
 FactoryBot.define do
   factory :user do
-    handle { Faker::Internet.username }
-    username { Faker::Name.first_name }
+    sequence(:handle) { |n| "user#{n}" }
+    sequence(:username) { |n| "User #{n}" }
     bio { Faker::Lorem.sentence }
     email_address { Faker::Internet.email }
     password { "Password-1!" }

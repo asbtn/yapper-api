@@ -21,11 +21,7 @@ module V1
     private
 
     def user
-      @user ||= if params[:id] == "me"
-                  current_user
-                else
-                  User.find_by_identifier(params[:id])
-                end
+      @user ||= User.find(params[:id])
     end
 
     def user_params
