@@ -20,8 +20,8 @@ class PostSerializer
 
   include JSONAPI::Serializer
 
-  belongs_to :user
+  belongs_to :user, serializer: PublicUserSerializer
 
-  attributes :id, :content, :created_at
+  attributes :content, :created_at
 
 end

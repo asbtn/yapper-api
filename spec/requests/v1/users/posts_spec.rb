@@ -4,8 +4,7 @@ RSpec.describe "Users Posts API", type: :request do
   let(:user) { create(:user) }
   let(:user_id) { user.id }
   let(:existing_post) { create(:post, user: user) }
-  let(:valid_post_content) { "Hello world!" }
-  let(:Authorization) { authorization_token }
+  let(:Authorization) { authorization_token(user) }
 
   path "/v1/users/{user_id}/posts" do
     parameter name: :user_id, in: :path, type: :string, description: "User ID"
@@ -24,55 +23,33 @@ RSpec.describe "Users Posts API", type: :request do
                properties: {
                  data: {
                    type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :string },
-                       type: { type: :string, example: "post" },
-                       attributes: {
-                         type: :object,
-                         properties: {
-                           id: { type: :integer },
-                           content: { type: :string },
-                           created_at: { type: :string, format: :date_time }
-                         },
-                         required: %w[id content created_at]
-                       },
-                       relationships: {
-                         type: :object,
-                         properties: {
-                           user: {
-                             type: :object,
-                             properties: {
-                               data: {
-                                 type: :object,
-                                 properties: {
-                                   id: { type: :string },
-                                   type: { type: :string, example: "user" }
-                                 }
-                               }
-                             }
-                           }
-                         }
-                       },
-                       included: {
-                         type: :array,
-                         items: {
-                           type: :object,
-                           properties: USER_RESOURCE_OBJECT_SCHEMA
-                         }
-                       }
-                     }
-                   }
+                   items: POST_RESOURCE_OBJECT_SCHEMA
+                 },
+                 included: {
+                   type: :array,
+                   items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                  }
                },
                required: %w[data]
 
         run_test! do |response|
           data = JSON.parse(response.body)
+
           expect(data["data"].size).to eq 1
           expect(data["data"][0]["attributes"]["content"]).to eq user_post.content
+          expect(data["data"][0]["relationships"]["user"]["data"]["id"]).to eq user.id.to_s
+
+          if data["included"].present?
+            expect(data["included"][0]["type"]).to eq "public_user"
+            expect(data["included"][0]["id"]).to eq user.id.to_s
+          end
         end
+      end
+
+      response "401", "unauthorized" do
+        let(:Authorization) { invalid_authorization_token }
+
+        run_test!
       end
 
       response "404", "user not found" do
@@ -89,9 +66,7 @@ RSpec.describe "Users Posts API", type: :request do
 
     get "Show a post" do
       tags "Posts"
-
       produces "application/json"
-
       security [{ jwt: [] }]
 
       response "200", "post retrieved successfully" do
@@ -100,54 +75,37 @@ RSpec.describe "Users Posts API", type: :request do
 
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :string },
-                     type: { type: :string, example: "post" },
-                     attributes: {
-                       type: :object,
-                       properties: {
-                         id: { type: :integer },
-                         content: { type: :string },
-                         created_at: { type: :string, format: :date_time }
-                       },
-                       required: %w[id content created_at]
-                     },
-                     relationships: {
-                       type: :object,
-                       properties: {
-                         user: {
-                           type: :object,
-                           properties: {
-                             data: {
-                               type: :object,
-                               properties: {
-                                 id: { type: :string },
-                                 type: { type: :string, example: "user" }
-                               }
-                             }
-                           }
-                         }
-                       }
-                     }
-                   },
-                   required: %w[id type attributes relationships]
+                 data: POST_RESOURCE_OBJECT_SCHEMA,
+                 included: {
+                   type: :array,
+                   items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                  }
                },
                required: %w[data]
 
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          expect(data["data"]["id"]).to eq existing_post.id.to_s
+          expect(data["data"]["attributes"]["content"]).to eq existing_post.content
+          expect(data["data"]["relationships"]["user"]["data"]["id"]).to eq user.id.to_s
+
+          if data["included"].present?
+            expect(data["included"][0]["type"]).to eq "public_user"
+            expect(data["included"][0]["id"]).to eq user.id.to_s
+          end
+        end
       end
 
-      response "404", "user not found" do
-        let(:user_id) { "999" }
+      response "401", "unauthorized" do
+        let(:user_id) { existing_post.user.id }
         let(:id) { existing_post.id }
+        let(:Authorization) { invalid_authorization_token }
 
         run_test!
       end
 
-      response "404", "post not found" do
+      response "404", "user or post not found" do
         let(:user_id) { user.id }
         let(:id) { "999" }
 

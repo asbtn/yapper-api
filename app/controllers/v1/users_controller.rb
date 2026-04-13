@@ -5,14 +5,14 @@ module V1
     allow_unauthenticated_access only: :create
 
     def show
-      render_success UserSerializer.new(user)
+      render_success PublicUserSerializer.new(user)
     end
 
     def create
       service = ::Users::Create.call(user_params)
 
       if service.success?
-        render_success UserSerializer.new(service.result), status: :created
+        render_success PrivateUserSerializer.new(service.result), status: :created
       else
         render_errors service.errors
       end

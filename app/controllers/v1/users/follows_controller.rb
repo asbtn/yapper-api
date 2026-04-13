@@ -10,14 +10,15 @@ module V1
         follow = Follow.new(follower: current_user, following: user)
 
         if follow.save
-          render_success UserSerializer.new(user), status: :created
+          render_success PublicUserSerializer.new(user), status: :created
         else
           render_errors follow.errors
         end
       end
 
       def destroy
-        current_user.following.destroy(user)
+        follow = Follow.find_by!(follower: current_user, following: user)
+        follow.destroy
 
         head :no_content
       end

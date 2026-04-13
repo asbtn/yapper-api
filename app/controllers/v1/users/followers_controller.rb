@@ -7,7 +7,7 @@ module V1
       # TODO: Add Pundit
       # TODO: Add pagination
       def index
-        render_success UserSerializer.new(user.followers.order(:id))
+        render_success PublicUserSerializer.new(user.followers.order(:id))
       end
 
       private

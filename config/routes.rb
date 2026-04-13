@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :v1 do
-    resources :sessions, only: %i[create]
+    resource :session, only: %i[create]
     resources :users, only: %i[show create] do
       scope module: :users do
         resources :posts, only: %i[show index]
