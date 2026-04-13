@@ -1,6 +1,6 @@
 require "swagger_helper"
 
-RSpec.describe "Users Posts API", type: :request do
+RSpec.describe "Posts API", type: :request do
   let(:user) { create(:user) }
   let(:existing_post) { create(:post, user: user) }
   let(:valid_post_content) { "Hello world!" }
@@ -12,6 +12,7 @@ RSpec.describe "Users Posts API", type: :request do
 
       consumes "application/json"
       produces "application/json"
+
       security [{ jwt: [] }]
 
       parameter name: :body, in: :body, schema: {
@@ -24,7 +25,8 @@ RSpec.describe "Users Posts API", type: :request do
             },
             required: %w[content]
           }
-        }
+        },
+        required: %w[post]
       }
 
       response "201", "post created successfully" do
@@ -32,46 +34,15 @@ RSpec.describe "Users Posts API", type: :request do
 
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :string },
-                     type: { type: :string, example: "post" },
-                     attributes: {
-                       type: :object,
-                       properties: {
-                         id: { type: :integer },
-                         content: { type: :string },
-                         created_at: { type: :string, format: :date_time }
-                       },
-                       required: %w[id content created_at]
-                     },
-                     relationships: {
-                       type: :object,
-                       properties: {
-                         user: {
-                           type: :object,
-                           properties: {
-                             data: {
-                               type: :object,
-                               properties: {
-                                 id: { type: :string },
-                                 type: { type: :string, example: "user" }
-                               }
-                             }
-                           }
-                         }
-                       }
-                     }
-                   },
-                   required: %w[id type attributes relationships]
-                 }
+                 data: POST_RESOURCE_OBJECT_SCHEMA
                },
                required: %w[data]
 
         run_test! do |response|
           data = JSON.parse(response.body)
+
           expect(data["data"]["attributes"]["content"]).to eq valid_post_content
+          expect(data["data"]["relationships"]["user"]["data"]["id"]).to eq user.id.to_s
           expect(user.posts.last.content).to eq valid_post_content
         end
       end
@@ -110,7 +81,6 @@ RSpec.describe "Users Posts API", type: :request do
 
     delete "Delete a post" do
       tags "Posts"
-
       security [{ jwt: [] }]
 
       response "204", "post deleted successfully" do

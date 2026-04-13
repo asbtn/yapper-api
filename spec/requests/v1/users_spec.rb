@@ -23,7 +23,8 @@ RSpec.describe "Users API", type: :request do
             },
             required: %w[username handle email_address password password_confirmation]
           }
-        }
+        },
+        required: %w[user]
       }
 
       response "201", "user created successfully" do
@@ -42,25 +43,7 @@ RSpec.describe "Users API", type: :request do
 
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :string },
-                     type: { type: :string, example: "user" },
-                     attributes: {
-                       type: :object,
-                       properties: {
-                         id: { type: :integer },
-                         handle: { type: :string },
-                         username: { type: :string },
-                         bio: { type: :string },
-                         email_address: { type: :string }
-                       },
-                       required: %w[id username handle email_address]
-                     }
-                   },
-                   required: %w[id type attributes]
-                 }
+                 data: PRIVATE_USER_RESOURCE_OBJECT_SCHEMA
                },
                required: %w[data]
 
@@ -128,38 +111,6 @@ RSpec.describe "Users API", type: :request do
         run_test!
       end
 
-      response "422", "username" do
-        let!(:existing_user) { create(:user) }
-        let(:body) do
-          {
-            user: {
-              username: existing_user.username,
-              email_address: "test@example.com",
-              password: "SecurePass123!",
-              password_confirmation: "SecurePass123!"
-            }
-          }
-        end
-
-        run_test!
-      end
-
-      response "422", "username already taken" do
-        let!(:existing_user) { create(:user) }
-        let(:body) do
-          {
-            user: {
-              username: existing_user.username,
-              email_address: "unique@example.com",
-              password: "SecurePass123!",
-              password_confirmation: "SecurePass123!"
-            }
-          }
-        end
-
-        run_test!
-      end
-
       response "400", "missing nested user params" do
         let(:body) do
           {
@@ -183,45 +134,57 @@ RSpec.describe "Users API", type: :request do
 
         run_test!
       end
+
+      response "422", "username already taken" do
+        let!(:existing_user) { create(:user) }
+        let(:body) do
+          {
+            user: {
+              username: existing_user.username,
+              email_address: "unique@example.com",
+              password: "SecurePass123!",
+              password_confirmation: "SecurePass123!"
+            }
+          }
+        end
+
+        run_test!
+      end
     end
   end
 
   path "/v1/users/{id}" do
-    let(:Authorization) { authorization_token }
-
     parameter name: :id, in: :path, type: :string, description: "User ID"
 
     get "Show a user" do
       tags "Users"
-
       produces "application/json"
-
       security [{ jwt: [] }]
 
-      response "200", "post retrieved successfully" do
+      response "200", "user retrieved successfully" do
+        let(:Authorization) { authorization_token }
         let(:id) { create(:user).id }
 
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :string },
-                     type: { type: :string, example: "user" },
-                     attributes: {
-                       type: :object,
-                       properties: {
-                         id: { type: :integer },
-                         username: { type: :string },
-                         email_address: { type: :string }
-                       },
-                       required: %w[id username email_address]
-                     }
-                   },
-                   required: %w[id type attributes]
-                 }
+                 data: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                },
                required: %w[data]
+
+        run_test!
+      end
+
+      response "401", "unauthorized" do
+        let(:Authorization) { invalid_authorization_token }
+        let(:id) { create(:user).id }
+
+        run_test!
+      end
+
+      response "404", "user not found" do
+        let(:Authorization) { authorization_token }
+        let(:id) { "999" }
+
         run_test!
       end
     end

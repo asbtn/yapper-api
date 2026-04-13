@@ -18,7 +18,7 @@ RSpec.describe "Users follows API", type: :request do
       response "201", "user followed successfully" do
         schema type: :object,
                properties: {
-                 data: USER_RESOURCE_OBJECT_SCHEMA
+                 data: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                },
                required: %w[data]
 
@@ -62,7 +62,7 @@ RSpec.describe "Users follows API", type: :request do
           create(:follow, follower: current_user, following: path_user)
         end
 
-        run_test! do |_response|
+        run_test! do
           expect(Follow.exists?(follow_record.id)).to be false
         end
       end
@@ -73,13 +73,9 @@ RSpec.describe "Users follows API", type: :request do
         run_test!
       end
 
-      response "404", "user not found" do
+      response "404", "follow not found" do
         let(:user_id) { "999" }
 
-        run_test!
-      end
-
-      response "204", "user already unfollowed" do
         run_test!
       end
     end

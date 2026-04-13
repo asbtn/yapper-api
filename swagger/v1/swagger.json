@@ -38,19 +38,15 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
                             "content": {
                               "type": "string"
                             },
                             "created_at": {
                               "type": "string",
-                              "format": "date_time"
+                              "format": "date-time"
                             }
                           },
                           "required": [
-                            "id",
                             "content",
                             "created_at"
                           ]
@@ -71,11 +67,21 @@
                                       "type": "string",
                                       "example": "user"
                                     }
-                                  }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "type"
+                                  ]
                                 }
-                              }
+                              },
+                              "required": [
+                                "data"
+                              ]
                             }
-                          }
+                          },
+                          "required": [
+                            "user"
+                          ]
                         }
                       },
                       "required": [
@@ -151,7 +157,10 @@
                       "content"
                     ]
                   }
-                }
+                },
+                "required": [
+                  "post"
+                ]
               }
             }
           }
@@ -193,7 +202,7 @@
         }
       }
     },
-    "/v1/sessions": {
+    "/v1/session": {
       "post": {
         "summary": "Create session (login)",
         "tags": [
@@ -208,13 +217,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": {
-                      "type": "string"
-                    },
-                    "user": {
+                    "data": {
                       "type": "object",
                       "properties": {
-                        "data": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
                           "type": "object",
                           "properties": {
                             "id": {
@@ -227,9 +236,6 @@
                             "attributes": {
                               "type": "object",
                               "properties": {
-                                "id": {
-                                  "type": "integer"
-                                },
                                 "handle": {
                                   "type": "string"
                                 },
@@ -237,14 +243,14 @@
                                   "type": "string"
                                 },
                                 "bio": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 },
                                 "email_address": {
                                   "type": "string"
                                 }
                               },
                               "required": [
-                                "id",
                                 "username",
                                 "handle",
                                 "email_address"
@@ -257,12 +263,15 @@
                             "attributes"
                           ]
                         }
-                      }
+                      },
+                      "required": [
+                        "token",
+                        "user"
+                      ]
                     }
                   },
                   "required": [
-                    "token",
-                    "user"
+                    "data"
                   ]
                 }
               }
@@ -372,9 +381,6 @@
                           "attributes": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "integer"
-                              },
                               "handle": {
                                 "type": "string"
                               },
@@ -382,17 +388,13 @@
                                 "type": "string"
                               },
                               "bio": {
-                                "type": "string"
-                              },
-                              "email_address": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               }
                             },
                             "required": [
-                              "id",
                               "username",
-                              "handle",
-                              "email_address"
+                              "handle"
                             ]
                           }
                         },
@@ -465,9 +467,6 @@
                           "attributes": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "integer"
-                              },
                               "handle": {
                                 "type": "string"
                               },
@@ -475,17 +474,13 @@
                                 "type": "string"
                               },
                               "bio": {
-                                "type": "string"
-                              },
-                              "email_address": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               }
                             },
                             "required": [
-                              "id",
                               "username",
-                              "handle",
-                              "email_address"
+                              "handle"
                             ]
                           }
                         },
@@ -556,9 +551,6 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
                             "handle": {
                               "type": "string"
                             },
@@ -566,17 +558,13 @@
                               "type": "string"
                             },
                             "bio": {
-                              "type": "string"
-                            },
-                            "email_address": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
-                            "id",
                             "username",
-                            "handle",
-                            "email_address"
+                            "handle"
                           ]
                         }
                       },
@@ -617,13 +605,13 @@
         ],
         "responses": {
           "204": {
-            "description": "user already unfollowed"
+            "description": "user unfollowed successfully"
           },
           "401": {
             "description": "unauthorized"
           },
           "404": {
-            "description": "user not found"
+            "description": "follow not found"
           }
         }
       }
@@ -673,19 +661,15 @@
                           "attributes": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "integer"
-                              },
                               "content": {
                                 "type": "string"
                               },
                               "created_at": {
                                 "type": "string",
-                                "format": "date_time"
+                                "format": "date-time"
                               }
                             },
                             "required": [
-                              "id",
                               "content",
                               "created_at"
                             ]
@@ -706,62 +690,68 @@
                                         "type": "string",
                                         "example": "user"
                                       }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "included": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "type": "string",
-                                    "example": "user"
-                                  },
-                                  "attributes": {
-                                    "type": "object",
-                                    "properties": {
-                                      "id": {
-                                        "type": "integer"
-                                      },
-                                      "handle": {
-                                        "type": "string"
-                                      },
-                                      "username": {
-                                        "type": "string"
-                                      },
-                                      "bio": {
-                                        "type": "string"
-                                      },
-                                      "email_address": {
-                                        "type": "string"
-                                      }
                                     },
                                     "required": [
                                       "id",
-                                      "username",
-                                      "handle",
-                                      "email_address"
+                                      "type"
                                     ]
                                   }
                                 },
                                 "required": [
-                                  "id",
-                                  "type",
-                                  "attributes"
+                                  "data"
                                 ]
                               }
-                            }
+                            },
+                            "required": [
+                              "user"
+                            ]
                           }
-                        }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes",
+                          "relationships"
+                        ]
+                      }
+                    },
+                    "included": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "handle"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
                       }
                     }
                   },
@@ -771,6 +761,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "unauthorized"
           },
           "404": {
             "description": "user not found"
@@ -830,19 +823,15 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
                             "content": {
                               "type": "string"
                             },
                             "created_at": {
                               "type": "string",
-                              "format": "date_time"
+                              "format": "date-time"
                             }
                           },
                           "required": [
-                            "id",
                             "content",
                             "created_at"
                           ]
@@ -863,11 +852,21 @@
                                       "type": "string",
                                       "example": "user"
                                     }
-                                  }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "type"
+                                  ]
                                 }
-                              }
+                              },
+                              "required": [
+                                "data"
+                              ]
                             }
-                          }
+                          },
+                          "required": [
+                            "user"
+                          ]
                         }
                       },
                       "required": [
@@ -876,6 +875,45 @@
                         "attributes",
                         "relationships"
                       ]
+                    },
+                    "included": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "handle"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
                     }
                   },
                   "required": [
@@ -885,8 +923,11 @@
               }
             }
           },
+          "401": {
+            "description": "unauthorized"
+          },
           "404": {
-            "description": "post not found"
+            "description": "user or post not found"
           }
         }
       }
@@ -919,9 +960,6 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
                             "handle": {
                               "type": "string"
                             },
@@ -929,14 +967,14 @@
                               "type": "string"
                             },
                             "bio": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email_address": {
                               "type": "string"
                             }
                           },
                           "required": [
-                            "id",
                             "username",
                             "handle",
                             "email_address"
@@ -1111,7 +1149,10 @@
                       "password_confirmation"
                     ]
                   }
-                }
+                },
+                "required": [
+                  "user"
+                ]
               }
             }
           }
@@ -1142,7 +1183,7 @@
         ],
         "responses": {
           "200": {
-            "description": "post retrieved successfully",
+            "description": "user retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1161,20 +1202,20 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
-                            "id": {
-                              "type": "integer"
+                            "handle": {
+                              "type": "string"
                             },
                             "username": {
                               "type": "string"
                             },
-                            "email_address": {
-                              "type": "string"
+                            "bio": {
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
-                            "id",
                             "username",
-                            "email_address"
+                            "handle"
                           ]
                         }
                       },
@@ -1191,6 +1232,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "404": {
+            "description": "user not found"
           }
         }
       }

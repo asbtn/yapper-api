@@ -7,8 +7,10 @@ class SessionSerializer
 
   def serializable_hash
     {
-      token: token,
-      user: UserSerializer.new(user).serializable_hash
+      data: {
+        token: token,
+        user: PrivateUserSerializer.new(user).serializable_hash[:data]
+      }
     }
   end
 

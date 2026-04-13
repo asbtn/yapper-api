@@ -23,7 +23,7 @@ RSpec.describe "Users followings API", type: :request do
                properties: {
                  data: {
                    type: :array,
-                   items: USER_RESOURCE_OBJECT_SCHEMA
+                   items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                  }
                },
                required: %w[data]

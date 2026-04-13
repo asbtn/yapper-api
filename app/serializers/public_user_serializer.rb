@@ -15,10 +15,10 @@
 #
 #  index_users_on_handle  (handle) UNIQUE
 #
-class UserSerializer
+class PublicUserSerializer
 
   include JSONAPI::Serializer
 
-  attributes :id, :handle, :username, :bio, :email_address
+  attributes :handle, :username, :bio
 
 end
