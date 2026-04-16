@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_10_161414) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_151356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -37,8 +37,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_161414) do
     t.string "bio"
     t.datetime "created_at", null: false
     t.string "email_address", null: false
+    t.integer "followers_count", default: 0, null: false
+    t.integer "following_count", default: 0, null: false
     t.string "handle", null: false
     t.string "password_digest", null: false
+    t.integer "posts_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
     t.index ["handle"], name: "index_users_on_handle", unique: true

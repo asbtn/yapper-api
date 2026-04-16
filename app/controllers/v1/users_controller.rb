@@ -5,7 +5,13 @@ module V1
     allow_unauthenticated_access only: :create
 
     def show
-      render_success PublicUserSerializer.new(user)
+      render_success PublicUserSerializer.new(
+        user,
+        meta: {
+          followed_by_current_user: Follow.exists?(follower: current_user, following: user),
+          follows_current_user: Follow.exists?(follower: user, following: current_user)
+        }
+      )
     end
 
     def create

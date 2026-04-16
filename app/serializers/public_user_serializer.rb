@@ -19,6 +19,9 @@ class PublicUserSerializer
 
   include JSONAPI::Serializer
 
-  attributes :handle, :username, :bio
+  attributes :handle, :username, :bio,
+             :followers_count,
+             :following_count,
+             :posts_count
 
 end

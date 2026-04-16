@@ -25,7 +25,7 @@ class Post < ApplicationRecord
   # == Attributes ===========================================================
 
   # == Relationships ========================================================
-  belongs_to :user
+  belongs_to :user, counter_cache: true
 
   # == Validations ==========================================================
   validates :content, presence: true, length: { minimum: 1, maximum: 140 }
