@@ -5,7 +5,7 @@
     "rails:migrate": "docker compose exec web bin/rails db:migrate",
     "rails:annotate": "docker compose exec web bundle exec annotaterb models",
     "rails:docs": "docker compose exec web rake rswag:specs:swaggerize",
-    "rails:specs": "RAILS_ENV=test docker compose exec web bundle exec rspec",
+    "rails:specs": "docker compose exec -e RAILS_ENV=test web bundle exec rspec",
     "up": "docker compose up --build",
     "c": "docker compose exec web bash"
   }

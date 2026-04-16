@@ -9,11 +9,13 @@ class Follow < ApplicationRecord
   # == Relationships ========================================================
   belongs_to :follower,
              class_name: "User",
-             inverse_of: :outgoing_follows
+             inverse_of: :outgoing_follows,
+             counter_cache: :following_count
 
   belongs_to :following,
              class_name: "User",
-             inverse_of: :incoming_follows
+             inverse_of: :incoming_follows,
+             counter_cache: :followers_count
 
   # == Validations ==========================================================
   validates :follower_id,
