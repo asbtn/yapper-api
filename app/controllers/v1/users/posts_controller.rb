@@ -16,22 +16,6 @@ module V1
         render_success PostSerializer.new(post, include: [:user])
       end
 
-      def create
-        post = current_user.posts.build(post_params)
-
-        if post.save
-          render_success PostSerializer.new(post), status: :created
-        else
-          render_errors post.errors
-        end
-      end
-
-      def destroy
-        post.destroy
-
-        head :no_content
-      end
-
       private
 
       def user

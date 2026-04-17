@@ -8,7 +8,9 @@ PUBLIC_USER_RESOURCE_OBJECT_SCHEMA = {
       properties: {
         handle: { type: :string },
         username: { type: :string },
-        bio: { type: :string, nullable: true }
+        bio: { type: :string, nullable: true },
+        followers_count: { type: :integer },
+        following_count: { type: :integer }
       },
       required: %w[username handle]
     }
