@@ -35,6 +35,12 @@ class Post < ApplicationRecord
   # == Callbacks ============================================================
 
   # == Class Methods ========================================================
+  def self.timeline_for(user)
+    includes(:user)
+      .where(user: user.following)
+      .or(where(user: user))
+      .order(created_at: :desc)
+  end
 
   # == Instance Methods =====================================================
 

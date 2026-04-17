@@ -167,9 +167,17 @@ RSpec.describe "Users API", type: :request do
 
         schema type: :object,
                properties: {
-                 data: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
+                 data: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA,
+                 meta: {
+                   type: :object,
+                   properties: {
+                     followed_by_current_user: { type: :boolean },
+                     follows_current_user: { type: :boolean }
+                   },
+                   required: %w[followed_by_current_user follows_current_user]
+                 }
                },
-               required: %w[data]
+               required: %w[data meta]
 
         run_test!
       end

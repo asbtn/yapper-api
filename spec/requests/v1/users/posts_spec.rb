@@ -30,7 +30,7 @@ RSpec.describe "Users Posts API", type: :request do
                    items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                  }
                },
-               required: %w[data]
+               required: %w[data included]
 
         run_test! do |response|
           data = JSON.parse(response.body)
@@ -81,7 +81,7 @@ RSpec.describe "Users Posts API", type: :request do
                    items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
                  }
                },
-               required: %w[data]
+               required: %w[data included]
 
         run_test! do |response|
           data = JSON.parse(response.body)

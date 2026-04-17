@@ -90,10 +90,56 @@
                         "attributes",
                         "relationships"
                       ]
+                    },
+                    "included": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "handle"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "included"
                   ]
                 }
               }
@@ -336,6 +382,154 @@
         }
       }
     },
+    "/v1/timeline": {
+      "get": {
+        "summary": "Retrieve current user's timeline",
+        "tags": [
+          "Timeline"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "timeline retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "post"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "content": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "content",
+                              "created_at"
+                            ]
+                          },
+                          "relationships": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "data": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "example": "user"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "data"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "user"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes",
+                          "relationships"
+                        ]
+                      }
+                    },
+                    "included": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "user"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "handle": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "bio": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "username",
+                              "handle"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "included"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    },
     "/v1/users/{user_id}/followers": {
       "parameters": [
         {
@@ -390,6 +584,12 @@
                               "bio": {
                                 "type": "string",
                                 "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
                               }
                             },
                             "required": [
@@ -476,6 +676,12 @@
                               "bio": {
                                 "type": "string",
                                 "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
                               }
                             },
                             "required": [
@@ -560,6 +766,12 @@
                             "bio": {
                               "type": "string",
                               "nullable": true
+                            },
+                            "followers_count": {
+                              "type": "integer"
+                            },
+                            "following_count": {
+                              "type": "integer"
                             }
                           },
                           "required": [
@@ -739,6 +951,12 @@
                               "bio": {
                                 "type": "string",
                                 "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
                               }
                             },
                             "required": [
@@ -756,7 +974,8 @@
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "included"
                   ]
                 }
               }
@@ -900,6 +1119,12 @@
                               "bio": {
                                 "type": "string",
                                 "nullable": true
+                              },
+                              "followers_count": {
+                                "type": "integer"
+                              },
+                              "following_count": {
+                                "type": "integer"
                               }
                             },
                             "required": [
@@ -917,7 +1142,8 @@
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "included"
                   ]
                 }
               }
@@ -1211,6 +1437,12 @@
                             "bio": {
                               "type": "string",
                               "nullable": true
+                            },
+                            "followers_count": {
+                              "type": "integer"
+                            },
+                            "following_count": {
+                              "type": "integer"
                             }
                           },
                           "required": [
@@ -1224,10 +1456,26 @@
                         "type",
                         "attributes"
                       ]
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "followed_by_current_user": {
+                          "type": "boolean"
+                        },
+                        "follows_current_user": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "followed_by_current_user",
+                        "follows_current_user"
+                      ]
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "meta"
                   ]
                 }
               }

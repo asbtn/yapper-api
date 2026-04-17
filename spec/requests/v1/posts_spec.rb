@@ -34,9 +34,13 @@ RSpec.describe "Posts API", type: :request do
 
         schema type: :object,
                properties: {
-                 data: POST_RESOURCE_OBJECT_SCHEMA
+                 data: POST_RESOURCE_OBJECT_SCHEMA,
+                 included: {
+                   type: :array,
+                   items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
+                 }
                },
-               required: %w[data]
+               required: %w[data included]
 
         run_test! do |response|
           data = JSON.parse(response.body)

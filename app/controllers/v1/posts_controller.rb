@@ -6,7 +6,7 @@ module V1
       post = current_user.posts.build(post_params)
 
       if post.save
-        render_success PostSerializer.new(post), status: :created
+        render_success PostSerializer.new(post, include: [:user]), status: :created
       else
         render_errors post.errors
       end

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :v1 do
     resource :session, only: %i[create]
+
     resources :users, only: %i[show create] do
       scope module: :users do
         resources :posts, only: %i[show index]
@@ -12,7 +13,10 @@ Rails.application.routes.draw do
         resource :follow, only: %i[create destroy]
       end
     end
+
     resources :posts, only: %i[create destroy]
+
+    resource :timeline, only: :show
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
