@@ -71,7 +71,7 @@ group :development, :test do
 
   # Test data
   gem "factory_bot_rails", "~> 6.5"
-  gem "faker", "~> 3.7"
+  gem "faker", "~> 3.8"
 
   # One-liners
   gem "shoulda-matchers", "~> 7.0"
