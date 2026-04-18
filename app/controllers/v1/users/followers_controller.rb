@@ -5,9 +5,13 @@ module V1
     class FollowersController < ApplicationController
 
       # TODO: Add Pundit
-      # TODO: Add pagination
+
       def index
-        render_success PublicUserSerializer.new(user.followers.order(:id))
+        scope = user.followers.order(id: :desc)
+        @pagy, followers = pagy(:keyset, scope, limit: limit)
+
+        render_success PublicUserSerializer.new(followers,
+                                                meta: { next: @pagy.next })
       end
 
       private

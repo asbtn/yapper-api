@@ -31,15 +31,22 @@ class Post < ApplicationRecord
   validates :content, presence: true, length: { minimum: 1, maximum: 140 }
 
   # == Scopes ===============================================================
+  scope :ordered, -> { order(created_at: :desc, id: :desc) }
 
   # == Callbacks ============================================================
 
   # == Class Methods ========================================================
   def self.timeline_for(user)
-    includes(:user)
-      .where(user: user.following)
-      .or(where(user: user))
-      .order(created_at: :desc)
+    where(
+      "posts.user_id = :user_id OR EXISTS (
+      SELECT 1 FROM follows
+      WHERE follows.follower_id = :user_id
+        AND follows.following_id = posts.user_id
+    )",
+      user_id: user.id
+    )
+      .includes(:user)
+      .ordered
   end
 
   # == Instance Methods =====================================================

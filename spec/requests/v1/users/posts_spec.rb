@@ -28,9 +28,16 @@ RSpec.describe "Users Posts API", type: :request do
                  included: {
                    type: :array,
                    items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
+                 },
+                 meta: {
+                   type: :object,
+                   properties: {
+                     next: { type: :object, nullable: true }
+                   },
+                   required: %w[next]
                  }
                },
-               required: %w[data included]
+               required: %w[data included meta]
 
         run_test! do |response|
           data = JSON.parse(response.body)

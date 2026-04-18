@@ -5,11 +5,14 @@ module V1
     class PostsController < ApplicationController
 
       # TODO: Add Pundit
-      # TODO: Add pagination
-      def index
-        posts = user.posts.order(created_at: :desc)
 
-        render_success PostSerializer.new(posts, include: [:user])
+      def index
+        scope = user.posts.order(created_at: :desc)
+        @pagy, posts = pagy(:keyset, scope, limit: limit)
+
+        render_success PostSerializer.new(posts,
+                                          include: [:user],
+                                          meta: { next: @pagy.next })
       end
 
       def show

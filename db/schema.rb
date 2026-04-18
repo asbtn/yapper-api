@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_16_151356) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_18_172715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,8 +19,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_151356) do
     t.bigint "follower_id", null: false
     t.bigint "following_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["follower_id", "created_at", "id"], name: "index_follows_on_follower_id_and_created_at_and_id"
     t.index ["follower_id", "following_id"], name: "index_follows_on_follower_id_and_following_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_follower_id"
+    t.index ["following_id", "created_at", "id"], name: "index_follows_on_following_id_and_created_at_and_id"
     t.index ["following_id"], name: "index_follows_on_following_id"
     t.check_constraint "follower_id <> following_id", name: "follows_no_self_follow"
   end
@@ -30,6 +32,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_151356) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["created_at", "id"], name: "index_posts_on_created_at_and_id"
+    t.index ["user_id", "created_at", "id"], name: "index_posts_on_user_id_and_created_at_and_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

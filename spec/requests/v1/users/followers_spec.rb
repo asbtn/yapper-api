@@ -23,9 +23,16 @@ RSpec.describe "Users followers API", type: :request do
                  data: {
                    type: :array,
                    items: PUBLIC_USER_RESOURCE_OBJECT_SCHEMA
+                 },
+                 meta: {
+                   type: :object,
+                   properties: {
+                     next: { type: :object, nullable: true }
+                   },
+                   required: %w[next]
                  }
                },
-               required: %w[data]
+               required: %w[data meta]
 
         run_test! do |response|
           data = JSON.parse(response.body)
