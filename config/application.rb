@@ -31,6 +31,9 @@ module Yapper
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.x.pagination.default_page_size = 20
+    config.x.pagination.max_page_size = 50
+
   end
 
 end

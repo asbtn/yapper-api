@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
 
   include Authentication
+  include Pagy::Method
 
   private
 
@@ -18,6 +19,14 @@ class ApplicationController < ActionController::API
         details: errors.to_hash
       }
     }, status: status
+  end
+
+  def limit
+    config = Rails.configuration.x.pagination
+    requested = params.dig(:page, :size).to_i
+
+    requested = config.default_page_size if requested <= 0
+    [requested, config.max_page_size].min
   end
 
 end
