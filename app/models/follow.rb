@@ -36,7 +36,7 @@ class Follow < ApplicationRecord
   def prevent_self_follow
     return unless follower_id == following_id
 
-    errors.add(:following_id, "can't be the same as follower")
+    errors.add(:following_id, I18n.t("errors.messages.cant_follow_self"))
   end
 
 end

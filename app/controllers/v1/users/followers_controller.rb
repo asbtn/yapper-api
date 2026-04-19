@@ -4,8 +4,6 @@ module V1
 
     class FollowersController < ApplicationController
 
-      # TODO: Add Pundit
-
       def index
         scope = user.followers.order(id: :desc)
         @pagy, followers = pagy(:keyset, scope, limit: limit)

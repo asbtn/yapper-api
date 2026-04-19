@@ -32,7 +32,7 @@ RSpec.describe "Users API", type: :request do
           {
             user: {
               username: "test-user",
-              handle: "test-handle",
+              handle: "test_handle",
               bio: "This is a test user.",
               email_address: "test@example.com",
               password: "SecurePass123!",
@@ -66,47 +66,7 @@ RSpec.describe "Users API", type: :request do
           }
         end
 
-        schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     full_messages: {
-                       type: :array,
-                       items: { type: :string },
-                       example: ["Username can't be blank", "Email address is invalid"]
-                     },
-                     details: {
-                       type: :object,
-                       properties: {
-                         username: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         },
-                         handle: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         },
-                         email_address: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         },
-                         password: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         },
-                         password_confirmation: {
-                           type: %i[string array],
-                           items: { type: :string }
-                         }
-                       },
-                       additionalProperties: false
-                     }
-                   },
-                   required: %w[full_messages details]
-                 }
-               },
-               required: %w[errors]
+        schema VALIDATION_ERRORS_RESPONSE_SCHEMA
 
         run_test!
       end
@@ -118,19 +78,7 @@ RSpec.describe "Users API", type: :request do
           }
         end
 
-        schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     full_messages: {
-                       type: :array,
-                       items: { type: :string },
-                       example: ["User can't be blank"]
-                     }
-                   }
-                 }
-               }
+        schema VALIDATION_ERRORS_RESPONSE_SCHEMA
 
         run_test!
       end

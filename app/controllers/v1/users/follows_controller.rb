@@ -4,15 +4,13 @@ module V1
 
     class FollowsController < ApplicationController
 
-      # TODO: Add Pundit
-
       def create
         follow = Follow.new(follower: current_user, following: user)
 
         if follow.save
           render_success PublicUserSerializer.new(user), status: :created
         else
-          render_errors follow.errors
+          render_invalid follow.errors
         end
       end
 

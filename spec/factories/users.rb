@@ -17,10 +17,10 @@
 #
 FactoryBot.define do
   factory :user do
-    sequence(:handle) { |n| "user#{n}" }
+    sequence(:handle) { |n| "testuser#{n}" }
     sequence(:username) { |n| "User #{n}" }
+    sequence(:email_address) { |n| "user#{n}@example.com" }
     bio { Faker::Lorem.sentence }
-    email_address { Faker::Internet.email }
     password { "Password-1!" }
   end
 end

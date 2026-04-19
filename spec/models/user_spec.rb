@@ -52,11 +52,32 @@ describe User, type: :model do
     it { is_expected.to allow_value("test@example.com").for(:email_address) }
     it { is_expected.not_to allow_value("te st@e.jj").for(:email_address) }
     it { is_expected.to validate_length_of(:password).is_at_least(6) }
+
+    it { is_expected.to validate_length_of(:handle).is_at_least(3).is_at_most(30) }
+    it { is_expected.to validate_length_of(:username).is_at_least(3).is_at_most(30) }
+    it { is_expected.to validate_length_of(:bio).is_at_most(300) }
+
+    it { is_expected.to allow_value("valid_handle").for(:handle) }
+    it { is_expected.to allow_value("valid_handle_123").for(:handle) }
+    it { is_expected.to allow_value("VALID_HANDLE").for(:handle) }
+    it { is_expected.not_to allow_value("invalid-handle").for(:handle) }
+    it { is_expected.not_to allow_value("invalid handle").for(:handle) }
+    it { is_expected.not_to allow_value("invalid@handle").for(:handle) }
+
+    it { is_expected.not_to allow_value("me").for(:handle) }
+
+    it { is_expected.to allow_value("Password1").for(:password) }
+    it { is_expected.to allow_value("password1").for(:password) }
+    it { is_expected.to allow_value("PASSWORD1").for(:password) }
+    it { is_expected.not_to allow_value("password").for(:password) }
+    it { is_expected.not_to allow_value("123456").for(:password) }
   end
 
   describe "normalizations" do
     it { is_expected.to normalize(:email_address).from(" [email protected]\n").to("[email protected]") }
     it { is_expected.to normalize(:email_address).from("USER@EXAMPLE.COM").to("user@example.com") }
+    it { is_expected.to normalize(:handle).from("USERHANDLE").to("userhandle") }
+    it { is_expected.to normalize(:handle).from("User_Handle").to("user_handle") }
   end
 
   it "returns followers and following users" do
@@ -69,5 +90,15 @@ describe User, type: :model do
 
     expect(user.following).to contain_exactly(followed_user)
     expect(user.followers).to contain_exactly(follower_user)
+  end
+
+  describe "#generate_jwt_token" do
+    it "returns a JWT token containing the user id" do
+      user = create(:user)
+      token = user.generate_jwt_token
+
+      decoded = JwtToken.decode(token)
+      expect(decoded.dig(:data, :id)).to eq(user.id)
+    end
   end
 end

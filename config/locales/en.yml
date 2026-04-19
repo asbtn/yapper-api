@@ -29,3 +29,11 @@
 
 en:
   hello: "Hello world"
+  errors:
+    messages:
+      invalid_credentials: "Invalid credentials"
+      request_failed: "Request failed"
+      cant_follow_self: "can't be the same as follower"
+      handle_format: "can only contain letters, numbers, and underscores"
+      handle_reserved: "is reserved"
+      password_format: "must include at least one letter and one number"
