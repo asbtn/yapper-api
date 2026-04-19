@@ -4,8 +4,6 @@ module V1
 
     class PostsController < ApplicationController
 
-      # TODO: Add Pundit
-
       def index
         scope = user.posts.order(created_at: :desc)
         @pagy, posts = pagy(:keyset, scope, limit: limit)

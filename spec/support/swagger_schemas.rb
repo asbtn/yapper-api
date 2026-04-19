@@ -77,17 +77,20 @@ POST_RESOURCE_OBJECT_SCHEMA = {
 VALIDATION_ERRORS_RESPONSE_SCHEMA = {
   type: :object,
   properties: {
-    errors: {
+    error: {
       type: :object,
       properties: {
-        full_messages: {
-          type: :array,
-          items: { type: :string }
-        },
-        details: { type: :object }
+        message: { type: :string },
+        details: {
+          type: :object,
+          additionalProperties: {
+            type: :array,
+            items: { type: :string }
+          }
+        }
       },
-      required: %w[full_messages details]
+      required: %w[message]
     }
   },
-  required: %w[errors]
+  required: %w[error]
 }.freeze

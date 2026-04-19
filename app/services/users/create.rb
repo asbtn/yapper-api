@@ -8,13 +8,13 @@ module Users
       @params = params
     end
 
-    # TODO: Confirmation email
-    # TODO: Welcome email
     def call
-      return user if user.valid? && user.save!
-
-      errors.merge!(user.errors)
-      nil
+      if user.save
+        user
+      else
+        errors.merge!(user.errors)
+        nil
+      end
     end
 
     private

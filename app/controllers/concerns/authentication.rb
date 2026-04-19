@@ -30,7 +30,7 @@ module Authentication
   end
 
   def authenticate
-    render json: { error: "Unauthorized" }, status: :unauthorized unless current_user
+    render_error(status: :unauthorized) unless current_user
   end
 
 end

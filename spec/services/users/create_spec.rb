@@ -7,7 +7,7 @@ describe Users::Create, type: :service do
     let(:params) do
       {
         username: "test-user",
-        handle: "test-handle",
+        handle: "test_handle",
         email_address: "user@example.com",
         password: "password123",
         password_confirmation: "password123"
@@ -50,9 +50,11 @@ describe Users::Create, type: :service do
 
     it "has validation errors" do
       expect(service.errors).to include(
+        handle: ["can't be blank", "is too short (minimum is 3 characters)",
+                 "can only contain letters, numbers, and underscores"],
         username: ["can't be blank", "is too short (minimum is 3 characters)"],
         email_address: ["is invalid"],
-        password: ["is too short (minimum is 6 characters)"],
+        password: ["is too short (minimum is 6 characters)", "must include at least one letter and one number"],
         password_confirmation: ["doesn't match Password"]
       )
     end

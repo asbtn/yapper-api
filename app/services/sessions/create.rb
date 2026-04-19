@@ -11,7 +11,7 @@ module Sessions
     def call
       return session if authenticate
 
-      errors.add(:base, "Invalid credentials")
+      errors.add(:base, I18n.t("errors.messages.invalid_credentials"))
     end
 
     private

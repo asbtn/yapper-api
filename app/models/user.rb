@@ -18,8 +18,12 @@
 class User < ApplicationRecord
 
   # == Extensions ===========================================================
+  has_secure_password
 
   # == Constants ============================================================
+  VALID_HANDLE_REGEX = /\A[a-z0-9_]+\z/i
+  RESERVED_HANDLES = %w[me].freeze
+  PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*\d).+\z/
 
   # == Attributes ===========================================================
 
@@ -47,14 +51,18 @@ class User < ApplicationRecord
            source: :follower
 
   # == Validations ==========================================================
-  has_secure_password
-
-  # TODO: Validate characters in handle
-  # TODO: disallow me as a handle
   validates :handle,
             presence: true,
             uniqueness: { case_sensitive: false },
-            length: { minimum: 3, maximum: 30 }
+            length: { minimum: 3, maximum: 30 },
+            format: {
+              with: VALID_HANDLE_REGEX,
+              message: I18n.t("errors.messages.handle_format")
+            },
+            exclusion: {
+              in: RESERVED_HANDLES,
+              message: I18n.t("errors.messages.handle_reserved")
+            }
 
   validates :username,
             presence: true,
@@ -67,9 +75,13 @@ class User < ApplicationRecord
             presence: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  # TODO: Add password complexity
   validates :password,
-            length: { minimum: 6 }
+            length: { minimum: 6 },
+            format: {
+              with: PASSWORD_REGEX,
+              message: I18n.t("errors.messages.password_format")
+            },
+            if: -> { password.present? }
 
   # == Scopes ===============================================================
 
@@ -77,6 +89,7 @@ class User < ApplicationRecord
 
   # == Class Methods ========================================================
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  normalizes :handle, with: ->(h) { h.to_s.downcase }
 
   # == Instance Methods =====================================================
   def generate_jwt_token

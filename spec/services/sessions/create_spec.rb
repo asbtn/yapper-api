@@ -3,11 +3,11 @@ require "rails_helper"
 describe Sessions::Create, type: :service do
   subject(:service) { described_class.call(params) }
 
-  let(:user) { create(:user, password: "correct") }
+  let(:user) { create(:user, password: "correct1") }
 
   context "when credentials are correct" do
     let(:params) do
-      { email_address: user.email_address, password: "correct" }
+      { email_address: user.email_address, password: "correct1" }
     end
 
     it "is success" do

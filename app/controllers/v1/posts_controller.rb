@@ -8,7 +8,7 @@ module V1
       if post.save
         render_success PostSerializer.new(post, include: [:user]), status: :created
       else
-        render_errors post.errors
+        render_invalid post.errors
       end
     end
 

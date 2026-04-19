@@ -20,7 +20,7 @@ module V1
       if service.success?
         render_success PrivateUserSerializer.new(service.result), status: :created
       else
-        render_errors service.errors
+        render_invalid service.errors
       end
     end
 

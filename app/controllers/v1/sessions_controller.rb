@@ -10,7 +10,7 @@ module V1
       if service.success?
         render_success SessionSerializer.new(**service.result), status: :created
       else
-        render_errors service.errors, status: :unauthorized
+        render_error(status: :unauthorized)
       end
     end
 
