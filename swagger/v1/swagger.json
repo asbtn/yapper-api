@@ -155,27 +155,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "errors": {
+                    "error": {
                       "type": "object",
                       "properties": {
-                        "full_messages": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
+                        "message": {
+                          "type": "string"
                         },
                         "details": {
-                          "type": "object"
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
                         }
                       },
                       "required": [
-                        "full_messages",
-                        "details"
+                        "message"
                       ]
                     }
                   },
                   "required": [
-                    "errors"
+                    "error"
                   ]
                 }
               }
@@ -330,27 +332,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "errors": {
+                    "error": {
                       "type": "object",
                       "properties": {
-                        "full_messages": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
+                        "message": {
+                          "type": "string"
                         },
                         "details": {
-                          "type": "object"
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
                         }
                       },
                       "required": [
-                        "full_messages",
-                        "details"
+                        "message"
                       ]
                     }
                   },
                   "required": [
-                    "errors"
+                    "error"
                   ]
                 }
               }
@@ -514,11 +518,24 @@
                           "attributes"
                         ]
                       }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "object",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "next"
+                      ]
                     }
                   },
                   "required": [
                     "data",
-                    "included"
+                    "included",
+                    "meta"
                   ]
                 }
               }
@@ -604,10 +621,23 @@
                           "attributes"
                         ]
                       }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "object",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "next"
+                      ]
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "meta"
                   ]
                 }
               }
@@ -696,10 +726,23 @@
                           "attributes"
                         ]
                       }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "object",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "next"
+                      ]
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "meta"
                   ]
                 }
               }
@@ -971,11 +1014,24 @@
                           "attributes"
                         ]
                       }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "object",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "next"
+                      ]
                     }
                   },
                   "required": [
                     "data",
-                    "included"
+                    "included",
+                    "meta"
                   ]
                 }
               }
@@ -1228,79 +1284,29 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "errors": {
+                    "error": {
                       "type": "object",
                       "properties": {
-                        "full_messages": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "example": [
-                            "Username can't be blank",
-                            "Email address is invalid"
-                          ]
+                        "message": {
+                          "type": "string"
                         },
                         "details": {
                           "type": "object",
-                          "properties": {
-                            "username": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            "handle": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            "email_address": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            "password": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            "password_confirmation": {
-                              "type": [
-                                "string",
-                                "array"
-                              ],
-                              "items": {
-                                "type": "string"
-                              }
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
                             }
-                          },
-                          "additionalProperties": false
+                          }
                         }
                       },
                       "required": [
-                        "full_messages",
-                        "details"
+                        "message"
                       ]
                     }
                   },
                   "required": [
-                    "errors"
+                    "error"
                   ]
                 }
               }
@@ -1313,21 +1319,30 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "errors": {
+                    "error": {
                       "type": "object",
                       "properties": {
-                        "full_messages": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "example": [
-                            "User can't be blank"
-                          ]
+                        "message": {
+                          "type": "string"
+                        },
+                        "details": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
                         }
-                      }
+                      },
+                      "required": [
+                        "message"
+                      ]
                     }
-                  }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
