@@ -91,6 +91,10 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :handle, with: ->(h) { h.to_s.downcase }
 
+  def self.find_by_identifier(identifier)
+    find_by!("LOWER(handle) = ? OR id::text = ?", identifier.downcase, identifier)
+  end
+
   # == Instance Methods =====================================================
   def generate_jwt_token
     JwtToken.encode({ id: }, expiry: 7.days)

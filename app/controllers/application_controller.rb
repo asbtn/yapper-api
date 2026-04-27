@@ -42,7 +42,7 @@ class ApplicationController < ActionController::API
 
   def limit
     config = Rails.configuration.x.pagination
-    requested = params.dig(:page, :size).to_i
+    requested = params[:limit].to_i
 
     requested = config.default_page_size if requested <= 0
     [requested, config.max_page_size].min

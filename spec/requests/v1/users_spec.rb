@@ -145,4 +145,35 @@ RSpec.describe "Users API", type: :request do
       end
     end
   end
+
+  path "/v1/users/me" do
+    get "Retrieve current user" do
+      tags "Users"
+      produces "application/json"
+      security [{ jwt: [] }]
+
+      response "200", "current user retrieved successfully" do
+        let(:current_user) { create(:user) }
+        let(:Authorization) { authorization_token(current_user) }
+
+        schema type: :object,
+               properties: {
+                 data: PRIVATE_USER_RESOURCE_OBJECT_SCHEMA
+               },
+               required: %w[data]
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data["data"]["attributes"]["username"]).to eq current_user.username
+          expect(data["data"]["attributes"]["email_address"]).to eq current_user.email_address
+        end
+      end
+
+      response "401", "unauthorized" do
+        let(:Authorization) { invalid_authorization_token }
+
+        run_test!
+      end
+    end
+  end
 end

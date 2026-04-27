@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resource :session, only: %i[create]
 
     resources :users, only: %i[show create] do
+      get :me, on: :collection
       scope module: :users do
         resources :posts, only: %i[show index]
         resources :followers, only: :index

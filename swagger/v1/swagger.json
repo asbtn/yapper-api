@@ -1504,6 +1504,79 @@
           }
         }
       }
+    },
+    "/v1/users/me": {
+      "get": {
+        "summary": "Retrieve current user",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "current user retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "user"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "handle": {
+                              "type": "string"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "bio": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "email_address": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "username",
+                            "handle",
+                            "email_address"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
     }
   },
   "servers": [

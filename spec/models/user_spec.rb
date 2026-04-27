@@ -101,4 +101,24 @@ describe User, type: :model do
       expect(decoded.dig(:data, :id)).to eq(user.id)
     end
   end
+
+  describe ".find_by_identifier" do
+    let!(:user) { create(:user, handle: "testuser") }
+
+    context "when given a numeric id" do
+      it "finds user by id" do
+        expect(described_class.find_by_identifier(user.id.to_s)).to eq(user)
+      end
+    end
+
+    context "when given a handle" do
+      it "finds user by handle" do
+        expect(described_class.find_by_identifier("testuser")).to eq(user)
+      end
+
+      it "is case insensitive" do
+        expect(described_class.find_by_identifier("TESTUSER")).to eq(user)
+      end
+    end
+  end
 end

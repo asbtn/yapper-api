@@ -4,6 +4,10 @@ module V1
 
     allow_unauthenticated_access only: :create
 
+    def me
+      render_success PrivateUserSerializer.new(current_user)
+    end
+
     def show
       render_success PublicUserSerializer.new(
         user,
@@ -27,7 +31,7 @@ module V1
     private
 
     def user
-      @user ||= User.find(params[:id])
+      @user ||= User.find_by_identifier(params[:id])
     end
 
     def user_params

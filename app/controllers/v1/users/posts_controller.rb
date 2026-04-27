@@ -5,7 +5,8 @@ module V1
     class PostsController < ApplicationController
 
       def index
-        scope = user.posts.order(created_at: :desc)
+        scope = user.posts.order(created_at: :desc, id: :desc)
+
         @pagy, posts = pagy(:keyset, scope, limit: limit)
 
         render_success PostSerializer.new(posts,
@@ -20,7 +21,7 @@ module V1
       private
 
       def user
-        @user ||= User.find(params[:user_id])
+        @user ||= User.find_by_identifier(params[:user_id])
       end
 
       def post

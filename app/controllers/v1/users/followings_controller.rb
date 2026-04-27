@@ -15,7 +15,7 @@ module V1
       private
 
       def user
-        @user ||= User.find(params[:user_id])
+        @user ||= User.find_by_identifier(params[:user_id])
       end
 
     end
