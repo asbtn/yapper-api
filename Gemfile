@@ -39,7 +39,7 @@ gem "thruster", require: false
 gem "jsonapi-serializer", "~> 2.2"
 
 # JWT
-gem "jwt", "~> 3.1"
+gem "jwt", "~> 3.2"
 
 # CORS
 gem "rack-cors", "~> 3.0"
