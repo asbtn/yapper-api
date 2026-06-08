@@ -62,7 +62,7 @@ group :development, :test do
 
   # Rubocop linter
   gem "rubocop", "~> 1.86", require: false
-  gem "rubocop-rails", "~> 2.34", require: false
+  gem "rubocop-rails", "~> 2.35", require: false
   gem "rubocop-rspec", "~> 3.9", require: false
   gem "rubocop-rspec_rails", "~> 2.32", require: false
 
