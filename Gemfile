@@ -77,5 +77,5 @@ group :development, :test do
   gem "faker", "~> 3.8"
 
   # One-liners
-  gem "shoulda-matchers", "~> 7.0"
+  gem "shoulda-matchers", "~> 8.0"
 end
